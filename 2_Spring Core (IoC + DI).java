@@ -132,6 +132,18 @@ public class Car {
         System.out.println("Car is running (Constructor DI)...");
     }
 }
+++++++++++++++++++++++++++++++++++
+
+@Component
+public class OrderService {
+    private final PaymentService paymentService;
+
+    @Autowired
+    public OrderService(PaymentService paymentService) {
+        this.paymentService = paymentService;
+    }
+}
+
 
 ============================================================================
 
