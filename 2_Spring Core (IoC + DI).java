@@ -104,3 +104,135 @@ Car is running...
 | **Autowiring**     | Spring finds a matching bean and injects it   |
 | **Component Scan** | Automatically finds classes with `@Component` |
 
+
+
+ @Component
+public class Engine {
+    public void start() {
+        System.out.println("Engine started");
+    }
+}
+
+
+
+@Component
+public class Car {
+    private final Engine engine;
+
+
+
+    @Autowired
+    public Car(Engine engine) {  // Spring injects the dependency
+        this.engine = engine;
+    }
+
+
+
+    public void drive() {
+        engine.start();
+        System.out.println("Car is moving");
+    }
+}
+ 
+
+
+
+
+
+Sure! Let’s break this code down line by line in simple words, like you’re explaining it to a beginner. 🔍👇
+
+
+
+🔹 @Component
+
+@Component
+public class Engine {
+
+This tells Spring: "Hey! Manage this Engine class as a Bean."
+Meaning: Spring will create, configure, and inject objects of this class whenever needed.
+
+
+
+🔹 Engine class
+
+public void start() {
+    System.out.println("Engine started");
+}
+
+Simple method: When called, it just prints "Engine started".
+
+
+
+🔹 Another @Component
+
+@Component
+public class Car {
+
+Same as above: Spring will also manage the Car class as a Bean.
+
+
+
+🔹 Dependency Declaration
+
+private final Engine engine;
+
+Car needs an Engine to work.
+This is a dependency (Car depends on Engine).
+
+
+
+🔹 Constructor + @Autowired
+
+@Autowired
+public Car(Engine engine) {
+    this.engine = engine;
+}
+
+This is Constructor-Based Dependency Injection.
+@Autowired tells Spring:
+
+“When creating a Car object, please inject a matching Engine Bean automatically.”
+
+✅ So you don’t need to write: new Engine() anywhere. Spring handles that!
+
+
+
+🔹 drive() method
+
+public void drive() {
+    engine.start();
+    System.out.println("Car is moving");
+}
+
+When drive() is called:
+
+The Engine starts.
+Then the car moves.
+
+
+
+🔁 Full Working Together
+
+When you run your Spring Boot app:
+
+Spring scans all @Component classes.
+It creates and manages:
+
+One Engine bean
+One Car bean (and injects the Engine into it)
+When you get the Car bean and call drive():
+
+
+
+💡 Simple Analogy
+
+Engine is like a battery 🔋.
+Car is like a remote-control car 🚗.
+You don’t insert the battery manually — Spring does it for you via Dependency Injection.
+
+
+
+Let me know if you want me to show the main method or Spring Boot setup part for this example too!
+
+Engine started
+Car is moving
