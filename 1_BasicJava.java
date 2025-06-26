@@ -62,3 +62,60 @@ class Main {
         }
     }
 }
+
+
+
+
+
+==> POJO VS JavaBean
+POJO (Plain Old Java Object)
+A POJO is a simple Java object that doesn’t follow any special conventions or extend/implement any predefined Java classes/interfaces (like `Serializable`, `Cloneable`, etc.).
+🔹 Characteristics:
+* No restrictions on method names or signatures.
+* No requirement for getter/setter methods.
+* Can have any access modifier (private, protected, public).
+* Can contain business logic.
+
+🔹 Example:
+
+public class Person {
+    String name;
+    int age;
+}
+
+✅ **JavaBean**
+
+
+A JavaBean is a special type of POJO that follows specific conventions to be used in frameworks, tools, and components.
+🔹 Characteristics:
+* Must have a **public no-argument constructor**.
+* All properties must be **private** (encapsulation).
+* Provides **getter and setter** methods for accessing private fields.
+* Should be **serializable** (optional but recommended).
+
+🔹 Example:
+
+import java.io.Serializable;
+
+public class PersonBean implements Serializable {
+    private String name;
+    private int age;
+
+    public PersonBean() {} // No-arg constructor
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+}
