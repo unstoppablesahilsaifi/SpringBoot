@@ -104,7 +104,36 @@ Car is running...
 | **Autowiring**     | Spring finds a matching bean and injects it   |
 | **Component Scan** | Automatically finds classes with `@Component` |
 
+===========================================================================
+ You’ve already done Field Injection:
+java
+Copy
+Edit
+@Autowired
+private Engine engine;
+❗ Downside: Not testable and hard to mock. ❌
 
+ 
+ ✅ Best Practice: Constructor Injection
+java
+Copy
+Edit
+@Component
+public class Car {
+    private final Engine engine;
+
+    @Autowired  // Optional since Spring Boot 4.3+ if 1 constructor only
+    public Car(Engine engine) {
+        this.engine = engine;
+    }
+
+    public void drive() {
+        engine.start();
+        System.out.println("Car is running (Constructor DI)...");
+    }
+}
+
+============================================================================
 
  @Component
 public class Engine {
