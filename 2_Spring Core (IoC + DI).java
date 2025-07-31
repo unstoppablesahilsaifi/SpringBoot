@@ -277,3 +277,162 @@ Let me know if you want me to show the main method or Spring Boot setup part for
 
 Engine started
 Car is moving
+
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+ Perfect! Chalo ek **simple real-world example** dekhte hain:
+`Car` depends on `Engine`.
+Hum **2 versions** banayenge:
+
+---
+
+## 🔴 Version 1: **Direct Object Creation** (No Spring, No DI)
+
+### `Engine.java`
+
+```java
+public class Engine {
+    public void start() {
+        System.out.println("Petrol Engine started!");
+    }
+}
+```
+
+### `Car.java`
+
+```java
+public class Car {
+    private Engine engine = new Engine(); // ❌ Direct creation
+
+    public void drive() {
+        engine.start();
+        System.out.println("Car is running...");
+    }
+}
+```
+
+### `Main.java`
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        Car car = new Car();  // ❌ Manual wiring
+        car.drive();
+    }
+}
+```
+
+### 🔍 Problems:
+
+* Agar kal ko `ElectricEngine` chahiye, `Car` class modify karni padegi.
+* Testing me mock engine inject karna impossible.
+* Reusability nahi.
+* Spring ka koi fayda nahi.
+
+---
+
+## ✅ Version 2: **Constructor-Based Dependency Injection using Spring**
+
+### `Engine.java`
+
+```java
+import org.springframework.stereotype.Component;
+
+@Component
+public class Engine {
+    public void start() {
+        System.out.println("Petrol Engine started!");
+    }
+}
+```
+
+### `Car.java`
+
+```java
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+@Component
+public class Car {
+    private final Engine engine;
+
+    @Autowired
+    public Car(Engine engine) {
+        this.engine = engine;
+    }
+
+    public void drive() {
+        engine.start();
+        System.out.println("Car is running...");
+    }
+}
+```
+
+### `AppConfig.java`
+
+```java
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+@ComponentScan("com.example") // ⚠️ Replace with your package name
+public class AppConfig {
+}
+```
+
+### `Main.java`
+
+```java
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+public class Main {
+    public static void main(String[] args) {
+        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+
+        Car car = context.getBean(Car.class); // ✅ Spring handles wiring
+        car.drive();
+    }
+}
+```
+
+---
+
+## 🔄 Change Scenario: Petrol ➝ Electric Engine
+
+### `ElectricEngine.java`
+
+```java
+import org.springframework.stereotype.Component;
+
+@Component
+public class ElectricEngine extends Engine {
+    @Override
+    public void start() {
+        System.out.println("Electric Engine started silently!");
+    }
+}
+```
+
+### ✅ No need to touch `Car.java` — Spring will auto-inject new Engine if qualified!
+
+
+
+## 🧠 Conclusion
+
+| ❌ Direct Import/Creation | ✅ Dependency Injection (Spring)       |
+| ------------------------ | ------------------------------------- |
+| Tight coupling           | Loose coupling                        |
+| Hard to test             | Easy to test using mocks              |
+| Hard to replace          | Easy to swap implementations          |
+| No Spring power          | Full use of Spring container features |
+| Not reusable             | Reusable and maintainable             |
+
+---
+
+Agar chaho toh main ek **GitHub-ready project folder** bhi bana ke de sakta hoon with both versions side-by-side. Batana.
+
